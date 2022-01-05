@@ -65,7 +65,7 @@
               <button type="button" class="btn btn-danger" onclick="ResetCard(0)">
                 Reset
               </button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePINProperties" onclick="GetPinProperties(0)">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePINProperties">
                 Update PIN Properties
               </button>
             </div>
@@ -137,7 +137,7 @@
           <form>
 			<div class="mb-3">
               <label for="currentPinProp">Current PIN Properties</label>
-              <input type="text" class="form-control" id="currentPinProps" >
+              <input type="text" class="form-control" id="currentPinProp" placeholder="currentPinProp">
             </div>
             <div class="mb-3">
               <label for="minPinLen">Minimum PIN Length</label>
@@ -162,7 +162,6 @@
       </div>
     </div>
   </div>  
-
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
       <path fill-rule="evenodd" clip-rule="evenodd"

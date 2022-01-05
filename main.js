@@ -194,6 +194,20 @@ async function GetMemory(index) {
   _readers[index].disconnect();
 }
 
+async function GetPinProperties(index) {
+  console.log('Get Pin Properties from ' + _readers[index].name);
+  let atr = await _readers[index].connect(true);
+  let output = '';
+  let res = await _readers[index].transcieve('00A4040007A0000000791000');
+  res = await _readers[index].transcieve('005602000131');
+  console.log('< ' + res + '\n');
+  if (res.length > 7) {
+    let props = "Min: " + res.substr(4, 2) + " Max: " + res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric";
+    document.getElementById('currentPipProps').innerHTML = props;
+  }
+  _readers[index].disconnect();
+}
+
 async function ResetCard(index) {
   console.log('Resetting card in ' + _readers[index].name);
   let atr = await _readers[index].connect(true);
