@@ -48,15 +48,15 @@ function WebCard() {
     banner.id = "webcard-install-banner";
     banner.style = "width:100%;top:0;left:0;position:fixed;"
       + "background-color:rgba(250,250,210,0.75);border-bottom:1px solid gold;z-index:1030;"
-    var html = '<p style="margin:8pt;font:10pt Helvetica;color:black;">';
-    html += 'In order to provide a better login experience, this page uses your smart card.<br \\>Please install the latest ';
+    var html = '<p style="margin:8pt;font:14pt Helvetica;color:black;">';
+    html += 'This page needs access to your smart card readers.<br \\>Install the latest ';
 
     if (navigator.platform == "Win32")
       html += '<a href="https://webcard.cardid.org/webcard.msi">';
     else
       html += '<a href="' + WebCard.remoteURL + '/webcard.dmg">';
     
-    html += 'Smart Card Browser Extension</a> and restart your browser.</p>';
+    html += 'Smart Card Browser Extension</a> and reload the page.</p>';
     banner.innerHTML = html;
     document.body.appendChild(banner);
   }
