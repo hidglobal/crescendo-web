@@ -98,8 +98,8 @@
             <div class="mb-3">
               <label for="credentialType">Type</label>
               <select class="custom-select" id="credentialType">
-                <option value="1">PKI</option>
-                <option value="2">FIDO</option>
+                <option value="FIDO">FIDO</option>
+                <option value="PKI">PKI</option>
               </select>
             </div>
             <div class="mb-3">
@@ -109,7 +109,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="CreateCredentials(0)">Create</button>
+          <button type="button" class="btn btn-primary" onclick="CreateCredentials(0)">Create</button>
         </div>
       </div>
     </div>
