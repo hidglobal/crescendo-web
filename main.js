@@ -138,21 +138,26 @@ async function CreatePKICredentials(index, count, algo) {
   let startTime = new Date();
   let atr = await _readers[index].connect(true);
   if (count > 24) count = 24;
-  let res = await _readers[index].transcieve('00A404000BA000000308000010000100');
-  let output = res;
+  let cmd = '00A404000BA000000308000010000100'
+  let res = await _readers[index].transcieve(cmd);
+  let output = '> ' + cmd + '\n<' + res + '\n';
+  cmd = '00200080083030303030303030'
+  res = await _readers[index].transcieve(cmd);
+  output += '> ' + cmd + '\n<' + res + '\n';
   for (let i = 0; i < count; i++) {
     switch (algo) {
       case 'P256':
-        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '05AC03800111');
+        cmd = '004700' + createCreds[i][0] + '05AC03800111';
         break;
       case 'P384':
-        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '05AC03800111');
+        cmd = '004700' + createCreds[i][0] + '05AC03800111';
         break;
       case 'R256':
-        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '0AAC088001078103010001');
+        cmd = '004700' + createCreds[i][0] + '0AAC088001078103010001';
         break;
     }
-    output += '< ' + res + '\n';
+    res = await _readers[index].transcieve(cmd);
+    output += '> ' + cmd + '\n<' + res + '\n';
     res = await _readers[index].transcieve('10DB3FFFFF5C035FC1' + createCreds[i][1] + '5382018E708201851F8B08000000000000003368625C60D0C4A8B68099899189898DB14E9BF354A901171B87569BC7395B166666033E431E209F3994859987D9D739C8404E9CD7C8C8C0D0C0D4D0CCD0D2C8320ACC3533B0807231D4971908B0B1834D63626463D56E646150624E626051DDEAA891B0EBD4529D4D4EFA3352BEA8DE4FB3F83B79D5A20781D21C574A1FA5E5EFB8FD40F96540D20A95ABFB74ED1C276524342E9AAB52A72CEDFE66F2A57755C6D15AEB9D3C7C4F6EBE73D3416F6539C39699AFFFFAC69DF7DFBCA5F58AED84157343372D0E3608349005BA43968F458C45645BEF2AC1659F32B48ACA7714B2DD71E77ADE7CA6DA');
     res = await _readers[index].transcieve('00DB3FFF98401E24ADCC226120D6805D013F48813023E37F1656036620851C30CC190C06A94C860C931F543EE98C60F85B67A81DF0EB4AE242C666AF1FD3E5FAD252A78570969C3ADDB6A1A7552A4937E0FE4783A33B778628773319A808193CF97A2F29FE8793EBB26F3A9DF2DBFEB5BA7E5ECF54CB5C9A71EDB6EE5DFEFFDDC2C636512773B8636666CA5C9F2006002966D777A4010000710101FE0000');
     console.log(res);
