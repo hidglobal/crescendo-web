@@ -52,7 +52,7 @@ function WebCard() {
     html += 'In order to provide a better login experience, this page uses your smart card.<br \\>Please install the latest ';
 
     if (navigator.platform == "Win32")
-      html += '<a href="' + WebCard.remoteURL + '/webcard.msi">';
+      html += '<a href="https://github.com/cardid/webcard/releases/download/v0.2.3/webcard.msi">';
     else
       html += '<a href="' + WebCard.remoteURL + '/webcard.dmg">';
     
