@@ -106,10 +106,18 @@
               <label for="credentialCount">Count</label>
               <input type="text" class="form-control" id="credentialCount" placeholder="Number of creds">
             </div>
+            <div class="mb-3">
+              <label for="credentialType">Algorithm</label>
+              <select class="custom-select" id="credentialAlgo">
+                <option value="P256">EC p256</option>
+                <option value="P384">EC p384</option>
+                <option value="R256">RSA 2048</option>
+              </select>
+            </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="CreateCredentials(0)">Create</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="CreateCredentials(0)">Create</button>
         </div>
       </div>
     </div>

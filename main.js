@@ -24,9 +24,6 @@ async function ListReaders() {
 }
 
 async function CreateFIDOCredentials(index, count) {
-  console.log('Creating ' + count + ' FIDO credentials in ' + _readers[index].name);
-  let startTime = new Date();
-  let atr = await _readers[index].connect(true);
   let createCreds = [
     ['80100000BF01A5015820CAB2210B9A3AE4F877F8ED56318C2CE5D9D2DE8326B70CA0174B55F2DA18EE6A02A2626964736C6F67696E2E6D6963726F736F66742E636F6D646E616D65694D6963726F736F667403A36269644E6B65793140676D61696C2E636F6D646E616D6578196869642E676C6F62616C2E6B65793140676D61696C2E636F6D6469636F6E78196869642E676C6F62616C2E6B65793140676D61696C2E636F6D0481A263616C672664747970656A7075626C69632D6B657907A162726BF500'], 
 
@@ -90,6 +87,9 @@ async function CreateFIDOCredentials(index, count) {
     
     ['80100000DF01A601582049DBC6913C067728B423CD5CBB673F94AC0B2A89EA3A234DD12D8C8BED95651002A2626964736C6F67696E2E6D6963726F736F66742E636F6D646E616D65694D6963726F736F667403A3626964456B65793235646E616D65781A6869642E676C6F62616C2E6B6579323540676D61696C2E636F6D6469636F6E781A6869642E676C6F62616C2E6B6579323540676D61696C2E636F6D0482A263616C672664747970656A7075626C69632D6B6579A263616C6739010064747970656A7075626C69632D6B657906A16B686D61632D736563726574F507A162726BF500']
   ];
+  console.log('Creating ' + count + ' FIDO credentials in ' + _readers[index].name);
+  let startTime = new Date();
+  let atr = await _readers[index].connect(true);
   if (count > 25) count = 25;
   let res = await _readers[index].transcieve('00A4040008A0000006472F0001');
   let output = res;
@@ -107,8 +107,61 @@ async function CreateFIDOCredentials(index, count) {
   console.log(output);
 }
 
-async function CreatePKICredentials(index, count) {
-
+async function CreatePKICredentials(index, count, algo) {
+  const createCreds = [
+    ['9A', '05'],
+    ['9C', '0A'],
+    ['9D', '0B'],
+    ['9E', '01'],
+    ['82', '0D'],
+    ['83', '0E'],
+    ['84', '0F'],
+    ['85', '10'],
+    ['86', '11'],
+    ['87', '12'],
+    ['88', '13'],
+    ['89', '14'],
+    ['8A', '15'],
+    ['8B', '16'],
+    ['8C', '17'],
+    ['8D', '18'],
+    ['8E', '19'],
+    ['8F', '1A'],
+    ['90', '1B'],
+    ['91', '1C'],
+    ['92', '1D'],
+    ['93', '1E'],
+    ['94', '1F'],
+    ['95', '20'],
+  ];
+  console.log('Creating ' + count + ' PKI credentials in ' + _readers[index].name);
+  let startTime = new Date();
+  let atr = await _readers[index].connect(true);
+  if (count > 24) count = 24;
+  let res = await _readers[index].transcieve('00A404000BA000000308000010000100');
+  let output = res;
+  for (let i = 0; i < count; i++) {
+    switch (algo) {
+      case 'P256':
+        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '05AC03800111');
+        break;
+      case 'P384':
+        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '05AC03800111');
+        break;
+      case 'R256':
+        res = await _readers[index].transcieve('004700' + createCreds[i][0] + '0AAC088001078103010001');
+        break;
+    }
+    output += '< ' + res + '\n';
+    res = await _readers[index].transcieve('10DB3FFFFF5C035FC1' + createCreds[i][1] + '5382018E708201851F8B08000000000000003368625C60D0C4A8B68099899189898DB14E9BF354A901171B87569BC7395B166666033E431E209F3994859987D9D739C8404E9CD7C8C8C0D0C0D4D0CCD0D2C8320ACC3533B0807231D4971908B0B1834D63626463D56E646150624E626051DDEAA891B0EBD4529D4D4EFA3352BEA8DE4FB3F83B79D5A20781D21C574A1FA5E5EFB8FD40F96540D20A95ABFB74ED1C276524342E9AAB52A72CEDFE66F2A57755C6D15AEB9D3C7C4F6EBE73D3416F6539C39699AFFFFAC69DF7DFBCA5F58AED84157343372D0E3608349005BA43968F458C45645BEF2AC1659F32B48ACA7714B2DD71E77ADE7CA6DA');
+    res = await _readers[index].transcieve('00DB3FFF98401E24ADCC226120D6805D013F48813023E37F1656036620851C30CC190C06A94C860C931F543EE98C60F85B67A81DF0EB4AE242C666AF1FD3E5FAD252A78570969C3ADDB6A1A7552A4937E0FE4783A33B778628773319A808193CF97A2F29FE8793EBB26F3A9DF2DBFEB5BA7E5ECF54CB5C9A71EDB6EE5DFEFFDDC2C636512773B8636666CA5C9F2006002966D777A4010000710101FE0000');
+    console.log(res);
+    output += '<' + res + '\n';
+  }
+  _readers[index].disconnect();
+  let elapsed = new Date() - startTime;
+  output += 'Total: ' + elapsed + 'ms'
+  console.log(output);
 }
 
 async function CreateCredentials(index) {
@@ -118,9 +171,11 @@ async function CreateCredentials(index) {
       await CreateFIDOCredentials(index, count);
       break;
     case 'PKI':
-      await CreatePKICredentials(index, count);
+      let algo = document.getElementById('credentialAlgo').value;
+      await CreatePKICredentials(index, count, algo);
       break;
   }
+  GetMemory(index);
 }
 
 async function GetMemory(index) {
