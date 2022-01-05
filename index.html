@@ -65,7 +65,8 @@
               <button type="button" class="btn btn-danger" onclick="ResetCard(0)">
                 Reset
               </button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePINProperties" onclick="GetPinProperties(0)">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePinProperties"
+                onclick="GetPinProperties(0)">
                 Update PIN Properties
               </button>
             </div>
@@ -89,7 +90,7 @@
   </main>
 
   <!-- Modal -->
-  <div class="modal fade" id="newCredential" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="newCredential" tabindex="-1" aria-labelledby="newCredentialLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -120,48 +121,50 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="CreateCredentials(0)">Create</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+            onclick="CreateCredentials(0)">Create</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="updatePINProperties" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="updatePinProperties" tabindex="-1" aria-labelledby="updatePinPropertiesLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="updatePINPropertiesLabel">Update PIN Properties</h5>
+          <h5 class="modal-title" id="updatePinPropertiesLabel">Update PIN Properties</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form>
-			<div class="mb-3">
+            <div class="mb-3">
               <label for="currentPinProp">Current PIN Properties</label>
-              <input type="text" class="form-control" id="currentPinProps" >
+              <input type="text" class="form-control" id="currentPinProps">
             </div>
             <div class="mb-3">
               <label for="minPinLen">Minimum PIN Length</label>
-              <input type="text" class="form-control" id="minPinLen" placeholder="Min Pin Length">
+              <input type="text" class="form-control" id="minPinLen" placeholder="6">
             </div>
             <div class="mb-3">
               <label for="maxPinLen">Maximum PIN Length</label>
-              <input type="text" class="form-control" id="maxPinLen" placeholder="Max Pin Length">
+              <input type="text" class="form-control" id="maxPinLen" placeholder="8">
             </div>
             <div class="mb-3">
               <label for="pinType">PIN Format</label>
               <select class="custom-select" id="pinType">
-                <option value="PinNumericOnly">Numeric Only</option>
-                <option value="PinAlphaNumeric">Alpha Numeric</option>
+                <option value="Numeric">Numeric only</option>
+                <option value="Alphanumeric">Alphanumeric</option>
               </select>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="CreateCredentials(0)">Create</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+            onclick="SetPinProperties(0)">Change Properties</button>
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
