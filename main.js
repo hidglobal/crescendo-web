@@ -247,9 +247,25 @@ async function ResetCard(index) {
 }
 
 navigator.webcard.cardInserted = function(reader) {
+  let button = document.getElementById('activeReader');
+  if (button.innerHTML = reader.name) {
+    button.classList.remove('btn-secondary');
+    button.classList.add('btn-success');
+    button.disabled = false;
+    button.nextElementSibling.classList.remove('btn-secondary');
+    button.nextElementSibling.classList.add('btn-success');
+  }
   console.log('Card inserted in ' + reader.name);
 }
 
 navigator.webcard.cardRemoved = function(reader) {
+  let button = document.getElementById('activeReader');
+  if (button.innerHTML = reader.name) {
+    button.classList.remove('btn-success');
+    button.classList.add('btn-secondary');
+    button.disabled = true;
+    button.nextElementSibling.classList.remove('btn-success');
+    button.nextElementSibling.classList.add('btn-secondary');
+  }
   console.log('Card removed from ' + reader.name)
 }
