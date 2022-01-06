@@ -19,7 +19,19 @@ async function ListReaders() {
   if (_readers.length > 0) {
     let button = reader_ul.parentElement.firstElementChild;
     button.innerHTML = `${_readers[0].name}`;
-    button.disabled = false;
+    if (_readers[0].atr == "") {
+      button.classList.remove('btn-success');
+      button.classList.add('btn-secondary');
+      button.disabled = true;
+      button.nextElementSibling.classList.remove('btn-success');
+      button.nextElementSibling.classList.add('btn-secondary');
+    } else {
+      button.classList.add('btn-success');
+      button.classList.remove('btn-secondary');
+      button.disabled = false;
+      button.nextElementSibling.classList.add('btn-success');
+      button.nextElementSibling.classList.remove('btn-secondary');
+    }
   }
 }
 
@@ -102,6 +114,7 @@ async function CreateFIDOCredentials(index, count) {
       console.log(res);
       output += '> ' + command + '\n<' + res + '\n';
     }
+    DrawCredential('Credential ' + (i + 1), 'FIDO');
     await GetMemoryInner(index);
   }
   _readers[index].disconnect();
@@ -167,6 +180,7 @@ async function CreatePKICredentials(index, count, algo) {
     res = await _readers[index].transcieve('00DB3FFF98401E24ADCC226120D6805D013F48813023E37F1656036620851C30CC190C06A94C860C931F543EE98C60F85B67A81DF0EB4AE242C666AF1FD3E5FAD252A78570969C3ADDB6A1A7552A4937E0FE4783A33B778628773319A808193CF97A2F29FE8793EBB26F3A9DF2DBFEB5BA7E5ECF54CB5C9A71EDB6EE5DFEFFDDC2C636512773B8636666CA5C9F2006002966D777A4010000710101FE0000');
     console.log(res);
     output += '<' + res + '\n';
+    DrawCredential('Credential ' + (i + 1), 'PKI');
     await GetMemoryInner(index);
   }
   _readers[index].disconnect();
@@ -186,6 +200,24 @@ async function CreateCredentials(index) {
       await CreatePKICredentials(index, count, algo);
       break;
   }
+}
+
+function DrawCredential(title, subtitle) {
+  let container = document.getElementById('credentialList');
+  let card = document.createElement('div');
+  container.appendChild(card);
+  card.outerHTML = `
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">${title}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${subtitle}</h6>
+          <p class="card-text">Some details</p>
+          <a href="#" class="card-link">Delete</a>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 async function GetMemory(index) {
@@ -248,6 +280,7 @@ async function ResetCard(index) {
   res = await _readers[index].transcieve('801000000107');
   console.log('< ' + res + '\n');
   _readers[index].disconnect();
+  document.getElementById('credentialList').innerHTML = '';
   GetMemory(index);
 }
 
@@ -272,5 +305,6 @@ navigator.webcard.cardRemoved = function(reader) {
     button.nextElementSibling.classList.remove('btn-success');
     button.nextElementSibling.classList.add('btn-secondary');
   }
+  document.getElementById('credentialList').innerHTML = '';
   console.log('Card removed from ' + reader.name)
 }
