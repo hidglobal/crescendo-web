@@ -91,15 +91,16 @@ async function CreateFIDOCredentials(index, count) {
   let startTime = new Date();
   let atr = await _readers[index].connect(true);
   if (count > 25) count = 25;
-  let res = await _readers[index].transcieve('00A4040008A0000006472F0001');
-  let output = res;
   for (let i = 0; i < count; i++) {
+    let res = await _readers[index].transcieve('00A4040008A0000006472F0001');
+    let output = res;
     for (const command of createCreds[i]) {
       console.log(command);
       res = await _readers[index].transcieve(command);
       console.log(res);
       output += '> ' + command + '\n<' + res + '\n';
     }
+    GetMemory(index);
   }
   _readers[index].disconnect();
   let elapsed = new Date() - startTime;
@@ -138,13 +139,13 @@ async function CreatePKICredentials(index, count, algo) {
   let startTime = new Date();
   let atr = await _readers[index].connect(true);
   if (count > 24) count = 24;
-  let cmd = '00A404000BA000000308000010000100'
-  let res = await _readers[index].transcieve(cmd);
-  let output = '> ' + cmd + '\n<' + res + '\n';
-  cmd = '00200080083030303030303030'
-  res = await _readers[index].transcieve(cmd);
-  output += '> ' + cmd + '\n<' + res + '\n';
   for (let i = 0; i < count; i++) {
+    let cmd = '00A404000BA000000308000010000100'
+    let res = await _readers[index].transcieve(cmd);
+    let output = '> ' + cmd + '\n<' + res + '\n';
+    cmd = '00200080083030303030303030'
+    res = await _readers[index].transcieve(cmd);
+    output += '> ' + cmd + '\n<' + res + '\n';
     switch (algo) {
       case 'P256':
         cmd = '004700' + createCreds[i][0] + '05AC03800111';
@@ -162,6 +163,7 @@ async function CreatePKICredentials(index, count, algo) {
     res = await _readers[index].transcieve('00DB3FFF98401E24ADCC226120D6805D013F48813023E37F1656036620851C30CC190C06A94C860C931F543EE98C60F85B67A81DF0EB4AE242C666AF1FD3E5FAD252A78570969C3ADDB6A1A7552A4937E0FE4783A33B778628773319A808193CF97A2F29FE8793EBB26F3A9DF2DBFEB5BA7E5ECF54CB5C9A71EDB6EE5DFEFFDDC2C636512773B8636666CA5C9F2006002966D777A4010000710101FE0000');
     console.log(res);
     output += '<' + res + '\n';
+    GetMemory(index);
   }
   _readers[index].disconnect();
   let elapsed = new Date() - startTime;
@@ -203,7 +205,7 @@ async function GetPinProperties(index) {
   res = await _readers[index].transcieve('005602000131');
   console.log('< ' + res + '\n');
   if (res.length > 7) {
-    let props = "Min: " + res.substr(4, 2) + " Max: " + res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric";
+    let props = "Min: " + res.substr(4, 2) + " Max: " + (res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric");
     document.getElementById('currentPinProps').value = props;
   }
   _readers[index].disconnect();
