@@ -207,7 +207,7 @@ async function GetPinProperties(index) {
   res = await _readers[index].transcieve('005602000131');
   console.log('< ' + res + '\n');
   if (res.length > 7) {
-    let props = "Min: " + res.substr(4, 2) + " Max: " + (res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric");
+    let props = "Min: " + parseInt(res.substr(4, 2), 16) + " Max: " + parseInt(res.substr(6, 2), 16) + (res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric");
     document.getElementById('currentPinProps').value = props;
   }
   _readers[index].disconnect();
