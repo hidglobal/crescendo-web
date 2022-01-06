@@ -102,11 +102,11 @@ async function CreateFIDOCredentials(index, count) {
       console.log(res);
       output += '> ' + command + '\n<' + res + '\n';
     }
+    await GetMemoryInner(index);
   }
   _readers[index].disconnect();
   let elapsed = new Date() - startTime;
   output += 'Total: ' + elapsed + 'ms'
-  await GetMemory(index);
   console.log(output);
 }
 
@@ -167,11 +167,11 @@ async function CreatePKICredentials(index, count, algo) {
     res = await _readers[index].transcieve('00DB3FFF98401E24ADCC226120D6805D013F48813023E37F1656036620851C30CC190C06A94C860C931F543EE98C60F85B67A81DF0EB4AE242C666AF1FD3E5FAD252A78570969C3ADDB6A1A7552A4937E0FE4783A33B778628773319A808193CF97A2F29FE8793EBB26F3A9DF2DBFEB5BA7E5ECF54CB5C9A71EDB6EE5DFEFFDDC2C636512773B8636666CA5C9F2006002966D777A4010000710101FE0000');
     console.log(res);
     output += '<' + res + '\n';
+    await GetMemoryInner(index);
   }
   _readers[index].disconnect();
   let elapsed = new Date() - startTime;
-  output += 'Total: ' + elapsed + 'ms'
-  await GetMemory(index);
+  output += 'Total: ' + elapsed + 'ms';
   console.log(output);
 }
 
@@ -186,20 +186,23 @@ async function CreateCredentials(index) {
       await CreatePKICredentials(index, count, algo);
       break;
   }
-  await GetMemory(index);
 }
 
 async function GetMemory(index) {
   console.log('Get Memory from ' + _readers[index].name);
   let atr = await _readers[index].connect(true);
+  await GetMemoryInner(index);
+  _readers[index].disconnect();
+}
+
+async function GetMemoryInner(index) {
   let output = '';
   let res = await _readers[index].transcieve('00A4040000');
   res = await _readers[index].transcieve('80CA00FE02DF25');
   console.log('< ' + res + '\n');
   let available = parseInt('0x' + res.substr(38, 8), 16);
   document.getElementById('memoryAvailable').innerHTML = available.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  document.getElementById('credentialsUsage').style.width = available < 69304 ? ((69304 - available) * 100 / 82932).toString() + '%' : '0%';
-  _readers[index].disconnect();
+  document.getElementById('credentialsUsage').style.width = available < 62328 ? ((62328 - available) * 100 / 82932).toString() + '%' : '0%';
 }
 
 async function GetPinProperties(index) {
