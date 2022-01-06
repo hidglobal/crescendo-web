@@ -93,6 +93,7 @@ async function CreateFIDOCredentials(index, count) {
   let atr = await _readers[index].connect(true);
   if (count > 25) count = 25;
   for (let i = 0; i < count; i++) {
+    console.log('Creating FIDO credential ' + (i + 1) + ' of ' + count);
     let res = await _readers[index].transcieve('00A4040008A0000006472F0001');
     output += res;
     for (const command of createCreds[i]) {
@@ -142,6 +143,7 @@ async function CreatePKICredentials(index, count, algo) {
   let atr = await _readers[index].connect(true);
   if (count > 24) count = 24;
   for (let i = 0; i < count; i++) {
+    console.log('Creating PKI credential ' + (i + 1) + ' of ' + count);
     let cmd = '00A404000BA000000308000010000100'
     let res = await _readers[index].transcieve(cmd);
     output += '> ' + cmd + '\n<' + res + '\n';
