@@ -190,7 +190,9 @@ async function GetMemory(index) {
   let res = await _readers[index].transcieve('00A4040000');
   res = await _readers[index].transcieve('80CA00FE02DF25');
   console.log('< ' + res + '\n');
-  document.getElementById('memoryAvailable').innerHTML = parseInt('0x' + res.substr(38, 8), 16);
+  let available = parseInt('0x' + res.substr(38, 8), 16);
+  document.getElementById('memoryAvailable').innerHTML = available.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  document.getElementById('credentialsUsage').style.width = available < 69304 ? ((69304 - available) * 100 / 82932).toString() + '%' : '0%';
   _readers[index].disconnect();
 }
 
@@ -202,7 +204,7 @@ async function GetPinProperties(index) {
   console.log('< ' + res + '\n');
   if (res.length > 7) {
     let props = "Min: " + res.substr(4, 2) + " Max: " + res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric";
-    document.getElementById('currentPinProps').innerHTML = props;
+    document.getElementById('currentPinProps').value = props;
   }
   _readers[index].disconnect();
 }
@@ -215,13 +217,9 @@ async function SetPinProperties(index) {
   console.log('< ' + res + '\n');
   res = await _readers[index].transcieve('00200000083030303030303030');
   console.log('< ' + res + '\n');
-  let cmd = '002608000601' + ('00' + parseInt(document.getElementById('minPinLen').value)).substr(-2) + ('00' + parseInt(document.getElementById('maxPinLen').value)).substr(-2) + '0000' + document.getElementById('pinType').value == 'Numeric' ? 'A5' : '00';
+  let cmd = '002608000601' + ('00' + parseInt(document.getElementById('minPinLen').value)).substr(-2) + ('00' + parseInt(document.getElementById('maxPinLen').value)).substr(-2) + '0000' + (document.getElementById('pinTypeNumeric').checked ? 'A5' : '00');
   res = await _readers[index].transcieve(cmd);
-  console.log('> ' + cmd + '< ' + res + '\n');
-  if (res.length > 7) {
-    let props = "Min: " + res.substr(4, 2) + " Max: " + res.substr(12, 2) == 'A5' ? " Numeric" : " Alphanumeric";
-    document.getElementById('currentPinProps').innerHTML = props;
-  }
+  console.log('> ' + cmd + '\n< ' + res + '\n');
   _readers[index].disconnect();
 }
 

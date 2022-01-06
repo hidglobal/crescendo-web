@@ -44,7 +44,7 @@
       <div class="row">
         <div class="col">
           <div class="progress memory-bar">
-            <div class="progress-bar bg-secondary" role="progressbar" style="width: 15%">System</div>
+            <div class="progress-bar bg-secondary" role="progressbar" style="width: 17%">Apps</div>
             <div class="progress-bar bg-primary" role="progressbar" style="width: 30%" id="credentialsUsage">Credentials
             </div>
           </div>
@@ -55,8 +55,7 @@
       <br />
 
       <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8">
+        <div class="col">
           <div class="row justify-content-end">
             <div class="col">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCredential">
@@ -73,7 +72,7 @@
           </div>
           <br />
 
-          <div class="container" id="credentialList">
+          <div class="container visually-hidden" id="credentialList">
             <div class="card" style="width: 18rem;">
               <div class="card-body">
                 <h5 class="card-title">Credential</h5>
@@ -139,22 +138,21 @@
           <form>
             <div class="mb-3">
               <label for="currentPinProp">Current PIN Properties</label>
-              <input type="text" class="form-control" id="currentPinProps">
+              <input type="text" class="form-control" id="currentPinProps" readonly>
             </div>
             <div class="mb-3">
               <label for="minPinLen">Minimum PIN Length</label>
-              <input type="text" class="form-control" id="minPinLen" placeholder="6">
+              <input type="number" class="form-control" id="minPinLen" min="4" max="8" value="6">
             </div>
             <div class="mb-3">
               <label for="maxPinLen">Maximum PIN Length</label>
-              <input type="text" class="form-control" id="maxPinLen" placeholder="8">
+              <input type="number" class="form-control" id="maxPinLen" min="4" max="8" value="8">
             </div>
             <div class="mb-3">
-              <label for="pinType">PIN Format</label>
-              <select class="custom-select" id="pinType">
-                <option value="Numeric">Numeric only</option>
-                <option value="Alphanumeric">Alphanumeric</option>
-              </select>
+              <input type="radio" name="pinType" id="pinTypeNumeric" checked>
+              <label for="pinTypeNumeric">Numeric</label>
+              <input type="radio" name="pinType" id="pinTypeAlphanumeric">
+              <label for="pinTypeAlphaumeric">Alphaumeric</label>
             </div>
           </form>
         </div>
