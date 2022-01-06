@@ -100,16 +100,16 @@
           <form>
             <div class="mb-3">
               <label for="credentialType">Type</label>
-              <select class="custom-select" id="credentialType">
+              <select class="custom-select" id="credentialType" onchange="this.value == 'FIDO' ? document.getElementById('algoSelector').classList.add('visually-hidden') : document.getElementById('algoSelector').classList.remove('visually-hidden')">
                 <option value="FIDO">FIDO</option>
                 <option value="PKI">PKI</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="credentialCount">Count</label>
-              <input type="text" class="form-control" id="credentialCount" placeholder="Number of creds">
+              <input type="number" class="form-control" id="credentialCount" min="1" max="25" value="1">
             </div>
-            <div class="mb-3">
+            <div id="algoSelector" class="mb-3 visually-hidden">
               <label for="credentialType">Algorithm</label>
               <select class="custom-select" id="credentialAlgo">
                 <option value="P256">EC p256</option>
@@ -152,7 +152,7 @@
               <input type="radio" name="pinType" id="pinTypeNumeric" checked>
               <label for="pinTypeNumeric">Numeric</label>
               <input type="radio" name="pinType" id="pinTypeAlphanumeric">
-              <label for="pinTypeAlphaumeric">Alphaumeric</label>
+              <label for="pinTypeAlphaumeric">Alphanumeric</label>
             </div>
           </form>
         </div>
